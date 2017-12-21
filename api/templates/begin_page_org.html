@@ -1,0 +1,26 @@
+{% load static %}
+<script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+<script src="{% static "js/begin-page-jquery.js" %}"></script>
+
+<head>
+<title>Scenario planning</title> 
+</head>
+
+<body>
+<p>Prognoses</p>
+<form action="/grading/" method="POST" id="gradable-form">
+{% csrf_token %} 
+{% if prog_list %}
+	{% for prog in prog_list %}
+		<li> <input type="checkbox" name= cp{{prog.prog_id}} > {{prog.head}} ({{prog.branche}}) <button id = p{{prog.prog_id}}> Lees meer </button> <i id = ip{{prog.prog_id}} >{{prog.body}} </i> </li>
+	{% endfor %}
+{% endif %}
+<p>Trends</p>
+{% if trend_list %}
+	{% for trend in trend_list %}
+		<li> <input type="checkbox" name= ct{{trend.trend_id}} > {{trend.head}} ({{trend.branche}}) <button id = t{{trend.trend_id}}> Lees meer </button> <i id = it{{trend.trend_id}} > {{trend.body}} </i> </li>		
+	{% endfor %}
+{% endif %}
+<input type="submit" value="Send">
+</form>
+</body>

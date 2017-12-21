@@ -1,0 +1,60 @@
+{% load static %}
+{% load filter_extras %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+<script src="{% static "js/result-page-jquery.js" %}"></script>
+<head>
+    <title>Scenario planning</title> 
+</head>
+<body class="w3-light-grey"> 
+
+<div class="w3-col m10">
+<header class="w3-container w3-center w3-padding-32"> 
+<h1> Beleggings percentage per branche </h1>
+
+<div class="tbl-content">
+    <table cellpadding="0" cellspacing="0" border="0">
+        <tbody>        
+            <tr>
+                <td> Branche </td>
+                {% for branche in branche_list %}
+                    <td> {{branche}} </td>
+                {% endfor %}
+            </tr> 
+            {% for i in sc_dict|enum_dict %}       
+            <tr>            
+            <td> Scenario {{i}} <button id = t{{i}}> Laat zien </button> <i id=it{{i}}> {% for prog_string in sc_dict|get_item_dict:i|get_item_dict:prog_string_list %} <li> {{prog_string}} </li> {% endfor %} {% for trend_string in sc_dict|get_item_dict:i|get_item_dict:trend_string_list %} <li> {{trend_string}} </li> {% endfor %} </i> </td>
+            {% for opt_dist in sc_dict|get_item_dict:i|get_item_dict:opt_dist_list %}
+                <td> {{opt_dist}} </td> 
+            {% endfor %}     
+            </tr>   
+            {% endfor %}     
+        </tbody>
+    </table>
+</div>
+
+<a href="{% url 'begin_page_2' %}" class="btn">Voeg een nieuw scenario toe</a>
+
+</header>
+</div>
+
+<div class="w3-col m2">    
+    <div class="w3-container">
+        <h3> In het nieuws deze maand: </h3>        
+            {% for i in number_list %}
+            <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
+                <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
+                <i class="fa fa-remove"></i>
+                </span>
+                <p> Zoek term: {{search_list|index:i}} </p>
+                <p> Woorden in context: {{context_list|index:i}} </p>
+                {% for j in title_list|index:i|enum %}
+                    <p> <a href={{url_list|index:i|index:j}}> {{title_list|index:i|index:j}} </a> </p>      
+                {% endfor %}
+            </div>            
+            {% endfor %}        
+    </div>
+</div>
+
+</body>
