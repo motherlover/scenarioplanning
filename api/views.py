@@ -6,8 +6,7 @@ from django.http import HttpResponse
 from django.template import loader
 import numpy as np
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from .forms import PostForm, GradableForm, SectorForm 
+from django.http import HttpResponseRedirect 
 from .side_functions import *
 
 def base(request, sector):    
