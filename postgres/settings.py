@@ -78,20 +78,21 @@ WSGI_APPLICATION = 'postgres.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'development.sqlite3'),
     }
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'scenario_planning',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres2',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+
+#DATABASES = {
+# #   'default': {
+#  #      'ENGINE': #'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'scenario_planning',
+#        'USER': 'postgres',
+#        'PASSWORD': 'postgres2',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+#}
 
 
 # Password validation
