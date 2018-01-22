@@ -21,7 +21,7 @@
     <thead>
     <tr>
         <th>Ontwikkeling</th>
-        <th>Neemt af / stagneert / krmipt</th>
+        <th>Neemt af / stagneert / krimpt</th>
         <th> </th>
         <th>Stabiel</th>
         <th> </th>
@@ -34,26 +34,16 @@
 <div class="tbl-content">
     <table cellpadding="0" cellspacing="0" border="0">
         <tbody>
-        {% if prog_list %}
-        {% for prog in prog_list %}
+        {% if dev_list %}
+        {% for dev in dev_list %}
             <tr>
-                <td id="{{prog.prog_id}}"> <a>{{prog.head}}</a> </td>
+                <td id="{{dev.rowid}}"> <a>{{dev.development}}</a> </td>
                 {% for num in buttons %} 
-                <td> <h1> <input type="radio" value=p{{prog.prog_id}}.{{num}} name="p{{prog.prog_id}}" id = "btn{{num}}" > </input> </h1> </td>
+                <td> <h1> <input type="radio" value=d{{dev.rowid}}.{{num}} name="d{{dev.rowid}}" id = "btn{{num}}" > </input> </h1> </td>
                 {% endfor %}                                
             </tr>
         {% endfor %}
-        {% endif %}
-        {% if trend_list %}
-        {% for trend in trend_list %}
-            <tr>
-                <td id="{{trend.trend_id}}"><a>{{trend.head}}</a> </td>
-                {% for num in buttons %} 
-                <td> <h1> <input type="radio" value=t{{trend.trend_id}}.{{num}} name="t{{trend.trend_id}}" id = "btn{{num}}" > </input> </h1> </td>
-                {% endfor %}                               
-            </tr>
-        {% endfor %}
-        {% endif %}
+        {% endif %}        
         </tbody>
     </table>
 </div>

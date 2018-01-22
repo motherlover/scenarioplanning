@@ -40,6 +40,15 @@ $(document).ready(function(){
         $(name).toggle();
     });
 
+    $("hideable").hide();  
+    $("button").click(function(e){
+        e.preventDefault()
+        var get_name = $(this).attr('id');
+        var name = "#h".concat(get_name);
+        console.log(name)
+        $(name).toggle();
+    });
+
 });
 
 $(function() {

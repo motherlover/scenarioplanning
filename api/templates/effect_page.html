@@ -33,26 +33,16 @@
 <div class="tbl-content">
     <table cellpadding="0" cellspacing="0" border="0">
         <tbody>
-        {% if prog_list %}
-        {% for prog in prog_list %}
+        {% if dev_list %}
+        {% for dev in dev_list %}
             <tr>
-                <td> {{prog.body}} </td>
+                <td> {{dev.body}} </td>
                 {% for branche in branche_list %}
-                    <td> <input type="text" value="" name="np{{prog.prog_id}}{{branche}}" id = "n_p" maxlength="4" required> </input> </td>
+                    <td> <input type="text" value="" name="nd{{dev.dev_id}}{{branche}}" id = "n_d" maxlength="4" required> </input> </td>
                 {% endfor %}
             </tr>
         {% endfor %}
-        {% endif %}
-        {% if trend_list %}
-        {% for trend in trend_list %}
-            <tr>
-            <td> {{trend.body}} </td>
-                {% for branche in branche_list %}
-                <td> <input type="text" value="" name="nt{{trend.trend_id}}{{branche}}" id = "n_t" maxlength="4" required> </input> </td> 
-                {% endfor %}
-            </tr>
-        {% endfor %}
-        {% endif %}
+        {% endif %}        
         </tbody>
     </table>
 </div>

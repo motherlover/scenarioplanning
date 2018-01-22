@@ -4,7 +4,7 @@ h1{
   margin-bottom: 15px;
 }
 table{
-  width:60%;
+  width:100%;
   table-layout: fixed;
 }
 .tbl-header{
@@ -23,6 +23,11 @@ td{
   border-bottom: solid 1px rgba(255,255,255,0.1);
 }
 
+/* Own tag */
+
+hideable{
+
+}
 
 /* demo styles */
 
