@@ -31,7 +31,7 @@ def grading(request):
         dev_list = dev_list | currentDev         
     # Determine current scenario
     cur_scen = request.session['scenario_nr']      
-     
+    print(cur_scen)
     # Save prog and trend id's to session              
     request.session[str(cur_scen)]['dev_id_list'] = dev_id_list    
     nr_of_devs = len(dev_list) 
@@ -100,6 +100,7 @@ def begin_page_2(request):
         devel_list = devel_list | currentDevel
 
     cur_scen = request.session['scenario_nr']
+    print(cur_scen)
     # Create a new empty dictionary for this scenario
     request.session[str(cur_scen)] = {}
     template = loader.get_template('begin_page.html')    
@@ -250,4 +251,10 @@ def request_new_dev(request):
     for_db.save()
     context = {}
     template = loader.get_template('request_new_dev.html')
+    return HttpResponse(template.render(context, request))
+
+# Page to be sent to in principle
+def home(request):    
+    context = {}
+    template = loader.get_template('home.html')
     return HttpResponse(template.render(context, request))
