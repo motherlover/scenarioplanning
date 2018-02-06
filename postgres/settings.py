@@ -25,8 +25,8 @@ SECRET_KEY = 'l065jbbor^!ct4apfi0s+reklx0a=d4b!k*+@y0@kt@t)*5$s-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ["13.95.105.79"]
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["13.95.105.79"]
+# ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -57,7 +57,7 @@ ROOT_URLCONF = 'postgres.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['./templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,3 +135,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 IMAGE_URL = '/static/images/'
+
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/sector_index'

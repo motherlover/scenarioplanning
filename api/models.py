@@ -102,6 +102,8 @@ class Scenario(models.Model):
     ebitda = models.IntegerField()
     bruto_margin = models.IntegerField() 
     liquidity = models.IntegerField()
+    branche = models.CharField(max_length=1023, blank=True, null=True)
+    rowid = models.IntegerField(primary_key=True)
 
     class Meta:
         managed = False

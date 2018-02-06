@@ -24,3 +24,10 @@ def enum_dict(Dict):
 def get_item_dict(Dict, int):
     return Dict[str(int)]
 
+@register.filter(name='get_item_dict_str')
+def get_item_dict_str(Dict, str):
+    return Dict[str]
+
+@register.filter(name='list_as_str')
+def list_as_str(List):
+    return str(List[:])

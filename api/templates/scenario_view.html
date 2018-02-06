@@ -1,0 +1,54 @@
+{% load static %}
+{% load filter_extras %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+<script src="{% static "js/result-page-jquery.js" %}"></script>
+<head>
+    <title>Scenario planning</title> 
+</head>
+<body class="w3-light-grey"> 
+
+<div class="w3-display-topright w3-padding">
+    <img src="static/images/example.png" alt="ABN logo">
+</div>
+
+<div class="w3-col m10">
+<header class="w3-container w3-center w3-padding-32"> 
+<h1> Verwachte ontwikkeling per branche </h1>
+<div class="tbl-content">
+    <form action="/remove_scenario/" method="POST" id="remove-form">
+    {% csrf_token %}
+    {% for branche in branche_set %}
+    <h2> {{branche}} </h2>
+    <table cellpadding="0" cellspacing="0" border="0">
+        <tbody>        
+            <tr>
+                <td> Voorspelde waardes </td>
+                {% for predicted_string in predicted_strings %}
+                    <td> {{predicted_string}} </td> 
+                {% endfor %} 
+                <td> Selecteer voor verwijdering </td>               
+            </tr> 
+            {% for i in sc_dict|get_item_dict_str:branche|enum_dict %}
+                <tr>
+                <td> Scenario {{i}} <button id = {{branche}}d{{i}}> Laat zien </button> <i id=i{{branche}}d{{i}}> {% for dev_string in sc_dict|get_item_dict_str:branche|get_item_dict:i|get_item_dict_str:'dev_string_list' %} <li> {{dev_string}} </li> {% endfor %} </i> </td>
+                {% for value in sc_dict|get_item_dict_str:branche|get_item_dict:i|get_item_dict_str:'predicted_values' %}                
+                    <td> {{value}} </td>                                     
+                {% endfor %} 
+                <td>  <input type="checkbox" name = {{branche}}splitter{{sc_dict|get_item_dict_str:branche|get_item_dict:i|get_item_dict_str:'date_created'}}splitter{{sc_dict|get_item_dict_str:branche|get_item_dict:i|get_item_dict_str:'dev_string_list'|list_as_str}}> </input> </td>
+                </tr>
+            {% endfor %}     
+        </tbody>
+    </table>
+    {% endfor %}
+    <input type="submit" value="Verwijder geselecteerde scenario's">
+    </form>
+</div>
+
+
+<a href="{% url 'home' %}" class="btn">Voeg scenario's toe</a>
+
+</header>
+
+</body>

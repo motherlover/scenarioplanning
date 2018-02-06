@@ -16,10 +16,15 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 	<img src="static/images/example.png" alt="ABN logo">
 </div>
 
+<div class="w3-display-topleft w3-padding">
+    <li> <a href="/scenario_view"> Mijn Scenario's </a> </li>
+    <li> <a href="/home"> Home </a> </li>
+</div>
+
 <!-- Header -->
 <header class="w3-container w3-center w3-padding-32"> 
   	<h1><b>Scenario planning per branche</b></h1>
-  	<p>Kies de branches waarin u geinteresseerd bent</p>
+  	<p>Kies de branches waarin u geinteresseerd bent {{user.get_username}}</p>
 	<form action="/begin_page_2/" method="POST" id="sector-form">
 	{% csrf_token %} 
 	<ul>

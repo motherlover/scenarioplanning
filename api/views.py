@@ -1,4 +1,4 @@
-from api.models import Prognose, Trend, Info, PrognoseEffect, TrendEffect, Development, Devel_for_branche, DevEffect, Requested_Dev
+from api.models import Prognose, Trend, Info, PrognoseEffect, TrendEffect, Development, Devel_for_branche, DevEffect, Requested_Dev, Scenario
 from rest_framework import viewsets
 from api.serializers import PrognoseSerializer, TrendSerializer, InfoSerializer
 from rest_framework import generics
@@ -10,8 +10,10 @@ from django.http import HttpResponseRedirect
 from .side_functions import *
 import datetime
 import sqlite3
+from django.contrib.auth.decorators import login_required
+import re
 
-  
+@login_required  
 def grading(request):    
     template = loader.get_template('grading.html')
     # Get dictionary from form
@@ -46,7 +48,10 @@ def grading(request):
     
     return HttpResponse(template.render(context, request))
 
-def sector_index(request): 
+@login_required
+def sector_index(request):
+    username = request.user.get_username()
+    request.session['username'] = username
     sector_list = []
     branche_list = []  
     # Initialisation
@@ -67,6 +72,7 @@ def sector_index(request):
     }    
     return HttpResponse(template.render(context, request))
 
+@login_required
 def begin_page_2(request): 
     # Process info from sector_index    
     if request.session['scenario_nr'] == 0 and request.session['dev_requested'] != True:
@@ -111,6 +117,7 @@ def begin_page_2(request):
     }    
     return HttpResponse(template.render(context, request))
 
+@login_required
 def result_page(request):
     # Process info from effect_page
     port_form = request.POST
@@ -166,6 +173,7 @@ def result_page(request):
     }    
     return HttpResponse(template.render(context, request)) 
 
+@login_required
 def result_page_new(request):
     # Process info from effect_page
     port_form = request.POST
@@ -187,7 +195,27 @@ def result_page_new(request):
     for sc in range(1,cur_scen+1):
         sc_dict[str(sc)] = request.session[str(sc)]
     predicted_strings = ['Omzet', 'Ebitda', 'Bruto marge', 'Liquiditeit']
-
+    # Save new scenario data
+    last_sc_dict = sc_dict[str(cur_scen)]
+    new_dev = last_sc_dict['dev_string_list']
+    user = request.session['username']
+    todaysdate = datetime.datetime.now().date()
+    estdate = todaysdate + datetime.timedelta(days=182)
+    # This has to be changed, but all are set 0 for now
+    turn_over = 0
+    ebitda=0
+    bruto_margin=0
+    liquidity=0
+    # Actual DB stuff    
+    for branche in branche_list:
+        to_save_scen = Scenario.objects.create(developments=str(new_dev),user=user,date_created=todaysdate,date_estimated=estdate, \
+            turn_over=turn_over,ebitda=ebitda,bruto_margin=bruto_margin,liquidity=liquidity,branche=branche)    
+        to_save_scen.save()        
+    # Remove duplicates
+    for row in Scenario.objects.all():
+        if Scenario.objects.filter(developments=row.developments,user=row.user,date_created=row.date_created,date_estimated=row.date_estimated, \
+            turn_over=row.turn_over,ebitda=row.ebitda,bruto_margin=row.bruto_margin,liquidity=row.liquidity,branche=row.branche).count() > 1:
+            row.delete()
     template = loader.get_template('result_page_2.html')        
     context = {          
         'branche_list' : branche_list,
@@ -197,7 +225,7 @@ def result_page_new(request):
     }    
     return HttpResponse(template.render(context, request)) 
 
-
+@login_required
 def effect_page(request):
     # Define the strings to be attached to the heads  of the objects
     add_str_list = [' neemt af/ stagneert/ krimpt', ' neemt licht af/ krimpt lichtelijk', ' stabiel' , ' neemt licht toe/ ontwikkelt/ groeit lichtelijk', ' neemt toe / ontwikkelt / groeit']
@@ -232,6 +260,7 @@ def effect_page(request):
     return HttpResponse(template.render(context, request))    
 
 # Page to be sent to when you want a new driver to be implemented
+@login_required
 def request_new_dev(request):
     # Prevent empty scenarios
     request.session['scenario_nr'] = request.session['scenario_nr'] - 1
@@ -245,7 +274,7 @@ def request_new_dev(request):
             new_dev = values
     print(new_dev)
     # Write to db for now with user "any"
-    user = "any"
+    user = request.session['username']
     todaysdate = datetime.datetime.today()    
     for_db = Requested_Dev(development=new_dev,user=user,date=todaysdate)
     for_db.save()
@@ -257,4 +286,70 @@ def request_new_dev(request):
 def home(request):    
     context = {}
     template = loader.get_template('home.html')
+    return HttpResponse(template.render(context, request))
+
+# Page that shows all saved scenarios and allows you to delete them
+def scenario_view(request):
+    user = request.session['username']
+    scenarios = Scenario.objects.filter(user=user)
+    # Rewrite development strings and write scenarios to structured dict
+    # Sorted by branche
+    predicted_strings = ['Omzet', 'Ebitda', 'Bruto marge', 'Liquiditeit']
+    i = 0
+    sc_dict = {}    
+    # Create set of branches
+    branche_list = [str(scenario.branche) for scenario in scenarios]
+    branche_set = set(branche_list)  
+    # Create subdicts
+    for branche in branche_set:
+        sc_dict[branche] = {}
+    # Fill subdicts
+    for scenario in scenarios:
+        key_list = list(sc_dict[str(scenario.branche)])        
+        if key_list == []:
+            i = 1
+        else:
+            int_list = [int(key) for key in key_list]
+            i = max(int_list) + 1
+        sc_dict[str(scenario.branche)][str(i)] = {}
+        dev_string_list = scenario.developments
+        clean_dev_string_list = [dev_string.replace('[','').replace(']','').replace("'",'') for dev_string in dev_string_list.split("',")]        
+        sc_dict[str(scenario.branche)][str(i)]['dev_string_list'] = clean_dev_string_list
+        sc_dict[str(scenario.branche)][str(i)]['predicted_values'] = [scenario.turn_over,scenario.ebitda,scenario.bruto_margin,scenario.liquidity]               
+        sc_dict[str(scenario.branche)][str(i)]['date_created'] = scenario.date_created
+    context = {
+        'sc_dict' : sc_dict,
+        'predicted_strings' : predicted_strings,
+        'branche_set' : branche_set
+        }
+    template = loader.get_template('scenario_view.html')
+    return HttpResponse(template.render(context, request))
+
+# Redirect page when trying to remove a scenario
+def remove_scenario(request):
+    user = request.session['username']
+    # Read information from the form
+    remove_form = (request.POST)
+    remove_dict = remove_form.dict()
+    print(remove_dict)
+    i = 0
+    removable_dict = {}
+    for branche, on in remove_dict.items():        
+        if on == 'on':
+            removable_dict[str(i)] = {}
+            branche_date_list = branche.split('splitter')
+            print(branche_date_list)
+            removable_dict[str(i)]['branche'] = branche_date_list[0]
+            removable_dict[str(i)]['date_created'] = branche_date_list[1]
+            removable_dict[str(i)]['dev_string_list'] = branche_date_list[2]
+            i += 1
+    # Remove specified scenarios
+    print(removable_dict)
+    for j in range(0,i):
+        dict_to_check = removable_dict[str(j)] 
+        print(dict_to_check)       
+        Scenario.objects.filter(developments=str(dict_to_check['dev_string_list']),user=user,date_created=dict_to_check['date_created'],branche=dict_to_check['branche']).delete()
+
+    context = {}
+    template = loader.get_template('remove_scenario.html')
     return HttpResponse(template.render(context, request))
