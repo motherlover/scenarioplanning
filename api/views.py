@@ -13,6 +13,8 @@ import sqlite3
 from django.contrib.auth.decorators import login_required
 import re
 
+# On this page the user provides a prediction of the effect of a development
+# on each selected branche
 @login_required  
 def grading(request):    
     template = loader.get_template('grading.html')
@@ -48,6 +50,8 @@ def grading(request):
     
     return HttpResponse(template.render(context, request))
 
+# On this page users can choose the branches they want to take into account
+# for the rest of the process
 @login_required
 def sector_index(request):
     username = request.user.get_username()
@@ -72,6 +76,9 @@ def sector_index(request):
     }    
     return HttpResponse(template.render(context, request))
 
+# This page is called the begin_page, but it´s actually not the first page, or even the second
+# you come across, but as they say in France: "je ne donne une fuck"
+# This is the page where the user selects the developments they want to include
 @login_required
 def begin_page_2(request): 
     # Process info from sector_index    
@@ -117,6 +124,8 @@ def begin_page_2(request):
     }    
     return HttpResponse(template.render(context, request))
 
+# This page isn't actually included anymore, but I keep it for reference,
+# for the js functionalities used
 @login_required
 def result_page(request):
     # Process info from effect_page
@@ -173,6 +182,7 @@ def result_page(request):
     }    
     return HttpResponse(template.render(context, request)) 
 
+# This page shows the results of the model: the predicted values defined in predicted_strings
 @login_required
 def result_page_new(request):
     # Process info from effect_page
@@ -194,6 +204,7 @@ def result_page_new(request):
     sc_dict = {}
     for sc in range(1,cur_scen+1):
         sc_dict[str(sc)] = request.session[str(sc)]
+    # What are we predicting
     predicted_strings = ['Omzet', 'Ebitda', 'Bruto marge', 'Liquiditeit']
     # Save new scenario data
     last_sc_dict = sc_dict[str(cur_scen)]
@@ -225,6 +236,7 @@ def result_page_new(request):
     }    
     return HttpResponse(template.render(context, request)) 
 
+# On this page the user complete their predictions: will something develop positively or negatively
 @login_required
 def effect_page(request):
     # Define the strings to be attached to the heads  of the objects
