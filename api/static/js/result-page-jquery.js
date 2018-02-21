@@ -1,5 +1,5 @@
 $(document).ready(function(){  
-    $("i").hide();  
+    $("i").hide();
     $("button").click(function(e){
         e.preventDefault()
         var get_name = $(this).attr('id');

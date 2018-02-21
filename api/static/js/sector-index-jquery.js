@@ -1,10 +1,10 @@
 
 $(document).ready(function(){  
-    $("i").hide();  
+    $("i").hide();
     $("button").click(function(e){
         e.preventDefault()
         var get_name = $(this).attr('id');
-        var N = 10; // Assuming sector never contains more than 3 branches        
+        var N = 10; // Assuming sector never contains more than N branches        
         for (j=0;j<N;j++) {
             var name = '#'.concat(get_name).concat("branche").concat(j);
             console.log(name)

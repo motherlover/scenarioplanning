@@ -185,9 +185,9 @@ def result_page_new(request):
     for branche, eff in port_dict.items():        
         if 'nd' in branche[:2]:             
             branche_clean = ''.join([i for i in branche[2:] if not i.isdigit()])                       
-            effect_list[branche_list.index(branche_clean)].append(int(eff))            
-    request.session[str(cur_scen)]['effect_list'] = effect_list 
-    request.session.modified = True          
+            # effect_list[branche_list.index(branche_clean)].append(int(eff))            
+    # request.session[str(cur_scen)]['effect_list'] = effect_list 
+    # request.session.modified = True          
     
     # Pull information per scenario
     request.session.modified = True 
