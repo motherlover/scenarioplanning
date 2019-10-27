@@ -9,51 +9,15 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
 
-class Prognose(models.Model):
+## Voorbeeld class
+# class Prognose(models.Model):
 
-    sector = models.CharField(max_length=1023, blank=True, null=True)
-    branche = models.CharField(max_length=1023, blank=True, null=True)
-    head = models.CharField(max_length=1023, blank=True, null=True)
-    body = models.CharField(max_length=1023, blank=True, null=True)
-    prog_id = models.IntegerField(primary_key=True)     
+#     sector = models.CharField(max_length=1023, blank=True, null=True)
+#     branche = models.CharField(max_length=1023, blank=True, null=True)
+#     head = models.CharField(max_length=1023, blank=True, null=True)
+#     body = models.CharField(max_length=1023, blank=True, null=True)
+#     prog_id = models.IntegerField(primary_key=True)     
 
-    class Meta:
-        managed = False
-        db_table = 'prog_table'
-
-class Trend(models.Model):
-    sector = models.CharField(max_length=1023, blank=True, null=True)
-    branche = models.CharField(max_length=1023, blank=True, null=True)
-    head = models.CharField(max_length=1023, blank=True, null=True)
-    body = models.CharField(max_length=1023, blank=True, null=True)
-    trend_id = models.IntegerField(primary_key=True)     
-
-    class Meta:
-        managed = False
-        db_table = 'trend_table'
-
-class Info(models.Model):
-    sector = models.CharField(max_length=1023, blank=True, null=True)
-    branche = models.CharField(max_length=1023, blank=True, null=True)    
-    body = models.CharField(max_length=1023, blank=True, null=True)
-    info_id = models.IntegerField(primary_key=True)     
-
-    class Meta:
-        managed = False
-        db_table = 'info_table'
-
-class PrognoseEffect(models.Model):    
-    body = models.CharField(max_length=1023, blank=True, null=True)
-    prog_id = models.IntegerField(primary_key=True)     
-
-    class Meta:
-        managed = False
-        db_table = 'prog_eff_table'
-
-class TrendEffect(models.Model):    
-    body = models.CharField(max_length=1023, blank=True, null=True)
-    trend_id = models.IntegerField(primary_key=True)     
-
-    class Meta:
-        managed = False
-        db_table = 'trend_eff_table'
+#     class Meta:
+#         managed = False
+#         db_table = 'prog_table'

@@ -1,3 +1,4 @@
+// Use as example for javascript executions
 $('#gradable-form').on('submit', function(event){
     event.preventDefault();
     console.log("form submitted!")  // sanity check
